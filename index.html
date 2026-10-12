@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0C1531" />
+  <title>Qredit | Unlock Your Gift</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="config.js" defer></script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <main class="shell">
+    <header class="brand"><span class="logo">Q</span><span>QREDIT</span></header>
+    <section class="panel" id="welcome" aria-labelledby="welcome-title">
+      <div class="symbol">✦</div>
+      <h1 id="welcome-title">A Gift Awaits!</h1>
+      <p>Welcome to Qredit. Tap below to unlock your exhibition gift.</p>
+      <button id="start" class="primary">Reveal My Gift</button>
+    </section>
+    <section class="panel hidden" id="reveal" aria-live="polite">
+      <div id="gift" class="gift" aria-hidden="true">🎁</div>
+      <h1>Unlocking your gift…</h1>
+      <p>Something special is coming your way.</p>
+    </section>
+    <section class="panel hidden" id="prize" aria-labelledby="prize-title">
+      <div class="symbol">✦</div>
+      <h1 id="prize-title">Congratulations!</h1>
+      <div class="reward"><strong id="reward-title"></strong><p id="reward-description"></p></div>
+      <button id="claim" class="primary">Claim Your Gift</button>
+    </section>
+    <section class="panel hidden" id="registration" aria-labelledby="registration-title">
+      <h1 id="registration-title">Claim Your Free Month</h1>
+      <p>Tell us a little about your business.</p>
+      <form id="lead-form">
+        <label>Full Name <input name="fullName" autocomplete="name" maxlength="120" required /></label>
+        <label>Phone Number <input name="phone" type="tel" autocomplete="tel" maxlength="30" required /></label>
+        <label>Email Address <input name="email" type="email" autocomplete="email" maxlength="180" required /></label>
+        <label>Business Description <textarea name="businessDescription" maxlength="1000" rows="4" required placeholder="What does your business do?"></textarea></label>
+        <label class="check"><input name="consent" type="checkbox" required /> I agree that Qredit may contact me about this offer and related services.</label>
+        <p class="small" id="policy-links"></p>
+        <div class="trap" aria-hidden="true"><label>Leave blank<input name="website" tabindex="-1" autocomplete="off" /></label></div>
+        <p class="error" id="form-message" role="alert"></p>
+        <button class="primary" id="submit" type="submit">Submit & Claim</button>
+      </form>
+    </section>
+    <section class="panel hidden" id="success" aria-labelledby="success-title">
+      <div class="symbol">✓</div><h1 id="success-title">Request Received!</h1>
+      <p>Thank you! Our team will contact you about your free month.</p>
+      <p class="small">Your request is subject to the offer's eligibility terms.</p>
+    </section>
+    <footer>Where money moves smarter.</footer>
+  </main>
+</body>
+</html>
