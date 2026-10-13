@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#0C1531" />
-  <title>Qredit | Spin & Win</title>
+  <title>كريدت | لف واربح</title>
   <link rel="stylesheet" href="style.css" />
   <script src="config.js" defer></script>
   <script src="script.js" defer></script>
@@ -14,48 +14,52 @@
   <main class="shell">
     <header class="brand"><span class="logo">Q</span><span>QREDIT</span></header>
     <section class="panel wheel-panel" id="welcome" aria-labelledby="welcome-title">
-      <div class="eyebrow">QREDIT EXHIBITION EXPERIENCE</div>
-      <h1 id="welcome-title">Spin & Win <span class="sparkle">✦</span></h1>
-      <p>One spin. Four surprises. Ready to try your luck?</p>
+      <div class="eyebrow">تجربة كريدت في المعرض</div>
+      <h1 id="welcome-title">لف واربح <span class="sparkle">✦</span></h1>
+      <p>ثماني خانات وأربع جوائز! جرّب حظك مع كريدت.</p>
       <div class="wheel-wrap">
         <div class="pointer" aria-hidden="true"></div>
-        <div class="wheel" id="wheel" aria-label="Prize wheel with four segments">
-          <div class="wheel-label label-one"><span>🎟️</span><b>FREE MONTH</b></div>
-          <div class="wheel-label label-two"><span>🍫</span><b>CHOCOLATE</b></div>
-          <div class="wheel-label label-three"><span>🔄</span><b>TRY AGAIN</b></div>
-          <div class="wheel-label label-four"><span>🎁</span><b>SURPRISE GIFT</b></div>
+        <div class="wheel" id="wheel" aria-label="عجلة الجوائز بثماني خانات">
+          <div class="wheel-label" style="--angle:22.5deg"><span>🎟️</span><b>شهر مجاني</b></div>
+          <div class="wheel-label" style="--angle:67.5deg"><span>🍫</span><b>شوكولاتة</b></div>
+          <div class="wheel-label" style="--angle:112.5deg"><span>🔄</span><b>حاول مرة أخرى</b></div>
+          <div class="wheel-label" style="--angle:157.5deg"><span>🎁</span><b>هدية</b></div>
+          <div class="wheel-label" style="--angle:202.5deg"><span>🎟️</span><b>شهر مجاني</b></div>
+          <div class="wheel-label" style="--angle:247.5deg"><span>🍫</span><b>شوكولاتة</b></div>
+          <div class="wheel-label" style="--angle:292.5deg"><span>🔄</span><b>حاول مرة أخرى</b></div>
+          <div class="wheel-label" style="--angle:337.5deg"><span>🎁</span><b>هدية</b></div>
           <div class="wheel-hub">Q</div>
         </div>
       </div>
-      <p id="spin-status" class="spin-status" aria-live="polite">Tap below to spin the wheel</p>
-      <button id="start" class="primary">SPIN THE WHEEL <span aria-hidden="true">↗</span></button>
+      <p id="spin-status" class="spin-status" aria-live="polite">اضغط الزر ولف عجلة الحظ</p>
+      <button id="start" class="primary">لف العجلة <span aria-hidden="true">↗</span></button>
     </section>
     <section class="panel hidden" id="prize" aria-labelledby="prize-title">
       <div class="result-emoji" id="result-emoji" aria-hidden="true">🎁</div>
-      <div class="eyebrow">YOUR SPIN RESULT</div>
-      <h1 id="prize-title">Congratulations!</h1>
+      <div class="eyebrow">نتيجة اللفة</div>
+      <h1 id="prize-title">مبروك!</h1>
       <div class="reward"><strong id="reward-title"></strong><p id="reward-description"></p></div>
-      <button id="claim" class="primary">Claim Your Prize</button>
+      <button id="claim" class="primary">استلم جائزتك</button>
     </section>
     <section class="panel hidden" id="registration" aria-labelledby="registration-title">
-      <h1 id="registration-title">Claim Your Prize</h1>
-      <p>Tell us a little about your business.</p>
+      <h1 id="registration-title">استلم جائزتك</h1>
+      <p>سجّل بياناتك لاستلام جائزتك.</p>
       <form id="lead-form">
-        <label>Full Name <input name="fullName" autocomplete="name" maxlength="120" required /></label>
-        <label>Phone Number <input name="phone" type="tel" autocomplete="tel" maxlength="30" required /></label>
-        <label>Email Address <input name="email" type="email" autocomplete="email" maxlength="180" required /></label>
-        <label>Business Description <textarea name="businessDescription" maxlength="1000" rows="4" required placeholder="What does your business do?"></textarea></label>
-        <label class="check"><input name="consent" type="checkbox" required /> I agree that Qredit may contact me about this offer and related services.</label>
+        <label>الاسم الكامل <input name="fullName" autocomplete="name" maxlength="120" required /></label>
+        <label>رقم الهاتف <input name="phone" type="tel" autocomplete="tel" maxlength="30" required /></label>
+        <label>البريد الإلكتروني <input name="email" type="email" autocomplete="email" maxlength="180" required /></label>
+        <label>وصف النشاط التجاري <textarea name="businessDescription" maxlength="1000" rows="4" required placeholder="احكيلنا باختصار عن نشاطك التجاري"></textarea></label>
+        <label class="check"><input name="consent" type="checkbox" required /> أوافق على تواصل كريدت معي بخصوص الجائزة وخدماتها.</label>
         <p class="small" id="policy-links"></p>
-        <div class="trap" aria-hidden="true"><label>Leave blank<input name="website" tabindex="-1" autocomplete="off" /></label></div>
+        <div class="trap" aria-hidden="true"><label>اتركه فارغًا<input name="website" tabindex="-1" autocomplete="off" /></label></div>
         <p class="error" id="form-message" role="alert"></p>
-        <button class="primary" id="submit" type="submit">Submit & Claim</button>
+        <button class="primary" id="submit" type="submit">إرسال البيانات واستلام الجائزة</button>
       </form>
     </section>
     <section class="panel hidden" id="success" aria-labelledby="success-title">
-      <div class="symbol">✓</div><h1 id="success-title">Request Received!</h1>
-      <p>Thank you! Our team will contact you about your prize.</p>
-      <p class="small">Your request is subject to the offer's eligibility terms.</p>
+      <div class="symbol">✓</div><h1 id="success-title">تم استلام طلبك!</h1>
+      <p>شكرًا إلك! فريق كريدت رح يتواصل معك بخصوص جائزتك.</p>
+      <p class="small">تخضع الجائزة لشروط العرض والأهلية.</p>
     </section>
     <footer>Where money moves smarter.</footer>
   </main>
