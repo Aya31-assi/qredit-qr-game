@@ -1,83 +1,108 @@
-const config = window.QREDIT_CONFIG || {};
-const sections = ['welcome','prize','registration','success'];
-const prizes = [
-  {title:'شهر مجاني', description:'ربحت شهرًا مجانيًا من رسوم اشتراك كريدت، وفق شروط العرض.', emoji:'🎟️', code:'free_month'},
-  {title:'شوكولاتة', description:'ربحت شوكولاتة! اعرض النتيجة لفريق كريدت في البوث.', emoji:'🍫', code:'chocolate'},
-  {title:'حاول مرة أخرى', description:'عندك فرصة ثانية! ارجع ولف العجلة من جديد.', emoji:'🔄', code:'try_again'},
-  {title:'هدية', description:'ربحت هدية! توجّه إلى فريق كريدت في البوث لاستلامها.', emoji:'🎁', code:'gift'}
+const config=window.QREDIT_CONFIG||{};
+const ids=['welcome','spinning','prize','registration','success'];
+const prizeTypes=[
+ {code:'free_month',label:'شهر مجاني',emoji:'🎟️',result:'ربحت شهر مجاني',description:'استمتع بشهر اشتراك مجاني مع كريدت، وفق شروط العرض.'},
+ {code:'chocolate',label:'شوكولاتة',emoji:'🍫',result:'ربحت شوكولاتة',description:'جائزتك الحلوة بانتظارك في بوث كريدت.'},
+ {code:'try_again',label:'حاول مرة أخرى',emoji:'🔄',result:'حاول مرة أخرى',description:'لسه عندك فرصة! لف العجلة من جديد.'},
+ {code:'gift',label:'هدية',emoji:'🎁',result:'ربحت هدية',description:'مفاجأة حلوة بانتظارك من كريدت.'}
 ];
-// Eight equally likely wheel slots: the four prize types repeat twice.
-const wheelPrizes = [...prizes, ...prizes];
-const wheel = document.getElementById('wheel');
-const spinButton = document.getElementById('start');
-const spinStatus = document.getElementById('spin-status');
-let spinning = false, rotation = 0, selectedPrize = null, spins = 0;
-function show(id){ sections.forEach(section => document.getElementById(section).classList.toggle('hidden',section!==id)); window.scrollTo({top:0,behavior:'instant'}); }
-const links = document.getElementById('policy-links');
-for (const [key,label] of [['termsUrl','شروط العرض'],['privacyUrl','سياسة الخصوصية']]) {
-  if(config[key]) { if(links.childNodes.length) links.append(' · '); const a=document.createElement('a');a.href=config[key];a.textContent=label;a.target='_blank';a.rel='noopener noreferrer';links.append(a); }
+const slots=[...prizeTypes,...prizeTypes];
+const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+let selected=null,rot=0,busy=false;
+function show(id){
+ ids.forEach(s=>document.getElementById(s).classList.toggle('hidden',s!==id));
+ window.scrollTo(0,0);
 }
-function celebrate(){
-  const root=document.getElementById('confetti');root.replaceChildren();
-  const colors=['#16c99b','#f0b43e','#ffffff','#7cead0'];
-  for(let i=0;i<95;i++){
-    const piece=document.createElement('i');piece.className='confetti-piece';
-    piece.style.setProperty('--x',Math.random()*100+'vw');
-    piece.style.setProperty('--dx',(Math.random()*260-130)+'px');
-    piece.style.setProperty('--delay',(Math.random()*.65)+'s');
-    piece.style.setProperty('--duration',(2.2+Math.random()*1.8)+'s');
-    piece.style.background=colors[i%colors.length];
-    root.append(piece);
-  }
-  setTimeout(()=>root.replaceChildren(),4700);
+function wheelMarkup(){
+ const labels=slots.map((p,i)=>{
+  const rad=(i*45+22.5-90)*Math.PI/180;
+  const x=50+34*Math.cos(rad),y=50+34*Math.sin(rad);
+  return `<div class="wheel-label ${i%4===3?'light':''}" style="left:${x}%;top:${y}%"><span class="emoji">${p.emoji}</span><span class="name">${p.label}</span></div>`;
+ }).join('');
+ return `<div class="wheel-wrap"><div class="pointer"></div><div class="wheel" id="wheel">${labels}<div class="hub"><img src="qredit-q.png" alt=""></div></div></div>`;
+}
+document.getElementById('wheel-home').innerHTML=wheelMarkup();
+const wheelElement=document.getElementById('wheel');
+const wheelWrap=wheelElement.closest('.wheel-wrap');
+document.getElementById('wheel-active').append(wheelWrap);
+document.getElementById('wheel-home').append(wheelWrap);
+function confetti(){
+ if(reduced)return;
+ const el=document.getElementById('confetti');el.replaceChildren();
+ const colors=['#16C99B','#F0B43E','#FFFFFF','#7DE5D0'];
+ for(let i=0;i<110;i++){
+  const piece=document.createElement('i');piece.className='confetti-piece';
+  piece.style.setProperty('--x',Math.random()*100+'vw');
+  piece.style.setProperty('--dx',(Math.random()*260-130)+'px');
+  piece.style.setProperty('--delay',(Math.random()*.8)+'s');
+  piece.style.setProperty('--duration',(2+Math.random()*2)+'s');
+  piece.style.background=colors[i%colors.length];el.append(piece);
+ }
+ setTimeout(()=>el.replaceChildren(),5100);
 }
 function spin(){
-  if(spinning)return;
-  spinning=true;spinButton.disabled=true;spinStatus.textContent='العجلة بتلف… بالتوفيق!';
-  const index=Math.floor(Math.random()*wheelPrizes.length);
-  // Eight segments, 45 degrees each; pointer at 12 o’clock.
-  const center=22.5+index*45;
-  const current=((rotation%360)+360)%360;
-  const desired=((360-center)%360);
-  const extra=((desired-current+360)%360);
-  rotation+=360*(6+Math.floor(Math.random()*3))+extra;
-  wheel.style.transform=`rotate(${rotation}deg)`;
-  setTimeout(()=>{
-    selectedPrize=wheelPrizes[index];spinning=false;
-    document.getElementById('reward-title').textContent=selectedPrize.title;
-    document.getElementById('reward-description').textContent=selectedPrize.description;
-    document.getElementById('result-emoji').textContent=selectedPrize.emoji;
-    document.getElementById('prize-title').textContent=selectedPrize.code==='try_again'?'فرصة جديدة!':'مبروك! ربحت!';
-    document.getElementById('claim').textContent=selectedPrize.code==='try_again'?'لف مرة ثانية':'استلم جائزتك';
-    show('prize');
-    if(selectedPrize.code!=='try_again' && !window.matchMedia('(prefers-reduced-motion: reduce)').matches)celebrate();
-    spinButton.disabled=false;
-  },5600);
+ if(busy)return;
+ busy=true;
+ document.getElementById('wheel-active').append(wheelWrap);
+ show('spinning');
+ const idx=Math.floor(Math.random()*8);
+ const center=22.5+idx*45;
+ const desired=(360-center)%360;
+ const current=((rot%360)+360)%360;
+ const adjustment=(desired-current+360)%360;
+ rot+=360*7+adjustment;
+ // Start after the spinning screen has been laid out.
+ requestAnimationFrame(()=>requestAnimationFrame(()=>{
+  wheelElement.style.transitionDuration=reduced?'0.15s':'5.6s';
+  wheelElement.style.transform=`rotate(${rot}deg)`;
+ }));
+ setTimeout(()=>{
+  selected=slots[idx];
+  document.getElementById('result-emoji').textContent=selected.emoji;
+  document.getElementById('prize-title').textContent=selected.code==='try_again'?'فرصة جديدة!':'مبروك!';
+  document.getElementById('reward-title').textContent=selected.result;
+  document.getElementById('reward-description').textContent=selected.description;
+  document.getElementById('claim').textContent=selected.code==='try_again'?'🔄 لف مرة ثانية':'🎁 سجّل لاستلام جائزتك';
+  show('prize');busy=false;
+  if(selected.code!=='try_again')confetti();
+ },reduced?200:5700);
 }
-spinButton.addEventListener('click',spin);
+document.getElementById('start').addEventListener('click',spin);
 document.getElementById('claim').addEventListener('click',()=>{
-  if(selectedPrize?.code==='try_again') { spins++;show('welcome');spinStatus.textContent='فرصة ثانية! لف العجلة من جديد.'; }
-  else show('registration');
+ if(selected?.code==='try_again'){
+  document.getElementById('wheel-home').append(wheelWrap);
+  show('welcome');
+ } else show('registration');
 });
+const links=document.getElementById('policy-links');
+for(const [key,label] of [['termsUrl','شروط العرض'],['privacyUrl','سياسة الخصوصية']]){
+ if(config[key]){
+  if(links.childNodes.length)links.append(' · ');
+  const a=document.createElement('a');a.href=config[key];a.textContent=label;
+  a.target='_blank';a.rel='noopener noreferrer';links.append(a);
+ }
+}
 document.getElementById('lead-form').addEventListener('submit',async event=>{
-  event.preventDefault();
-  const form=event.currentTarget, button=document.getElementById('submit'),message=document.getElementById('form-message');
-  message.textContent='';
-  if(!form.reportValidity())return;
-  if(!selectedPrize || selectedPrize.code==='try_again') {message.textContent='لازم تلف العجلة أولًا.';return;}
-  if(!config.formEndpoint || !/^https:\/\/script\.google\.com\/macros\/s\//.test(config.formEndpoint)){
-    message.textContent='في مشكلة بإعدادات الإرسال. تواصل مع فريق كريدت.';return;
-  }
-  button.disabled=true;button.textContent='جاري الإرسال…';
-  try{
-    const body=new URLSearchParams();
-    for(const [key,value] of new FormData(form).entries())body.append(key,value);
-    body.append('campaign','Qredit Exhibition QR');
-    body.append('prize',selectedPrize.code);
-    // Apps Script response is opaque in no-cors; successful fetch is not proof of storage.
-    await fetch(config.formEndpoint,{method:'POST',mode:'no-cors',body});
-    show('success');
-    document.querySelector('#success p').textContent=`تم إرسال طلب جائزتك (${selectedPrize.title}). فريق كريدت رح يتأكد من البيانات.`;
-  }catch(error){message.textContent='تعذّر إرسال الطلب. تأكد من الإنترنت وحاول مرة ثانية.';}
-  finally{button.disabled=false;button.textContent='إرسال البيانات واستلام الجائزة';}
+ event.preventDefault();
+ const form=event.currentTarget,button=document.getElementById('submit'),message=document.getElementById('form-message');
+ message.textContent='';
+ if(!form.reportValidity())return;
+ if(!selected||selected.code==='try_again'){message.textContent='لازم تلف العجلة أولًا.';return;}
+ if(!config.formEndpoint||!/^https:\/\/script\.google\.com\/macros\/s\//.test(config.formEndpoint)){
+  message.textContent='في مشكلة بإعدادات الإرسال. تواصل مع فريق كريدت.';return;
+ }
+ button.disabled=true;button.textContent='جاري الإرسال…';
+ try{
+  const body=new URLSearchParams();
+  for(const [k,v] of new FormData(form).entries())body.append(k,v);
+  body.append('campaign','Qredit Exhibition QR');
+  body.append('prize',selected.code);
+  // Apps Script cross-origin no-cors response is opaque; delivery is not independently confirmed.
+  await fetch(config.formEndpoint,{method:'POST',mode:'no-cors',body});
+  show('success');
+ }catch(err){
+  message.textContent='تعذّر إرسال البيانات. تأكد من الإنترنت وحاول مرة ثانية.';
+ }finally{
+  button.disabled=false;button.textContent='🎁 تأكيد واستلام الجائزة';
+ }
 });
