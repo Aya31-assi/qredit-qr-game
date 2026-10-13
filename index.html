@@ -4,33 +4,41 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#0C1531" />
-  <title>Qredit | Unlock Your Gift</title>
+  <title>Qredit | Spin & Win</title>
   <link rel="stylesheet" href="style.css" />
   <script src="config.js" defer></script>
   <script src="script.js" defer></script>
 </head>
 <body>
+  <div id="confetti" aria-hidden="true"></div>
   <main class="shell">
     <header class="brand"><span class="logo">Q</span><span>QREDIT</span></header>
-    <section class="panel" id="welcome" aria-labelledby="welcome-title">
-      <div class="symbol">✦</div>
-      <h1 id="welcome-title">A Gift Awaits!</h1>
-      <p>Welcome to Qredit. Tap below to unlock your exhibition gift.</p>
-      <button id="start" class="primary">Reveal My Gift</button>
-    </section>
-    <section class="panel hidden" id="reveal" aria-live="polite">
-      <div id="gift" class="gift" aria-hidden="true">🎁</div>
-      <h1>Unlocking your gift…</h1>
-      <p>Something special is coming your way.</p>
+    <section class="panel wheel-panel" id="welcome" aria-labelledby="welcome-title">
+      <div class="eyebrow">QREDIT EXHIBITION EXPERIENCE</div>
+      <h1 id="welcome-title">Spin & Win <span class="sparkle">✦</span></h1>
+      <p>One spin. Four surprises. Ready to try your luck?</p>
+      <div class="wheel-wrap">
+        <div class="pointer" aria-hidden="true"></div>
+        <div class="wheel" id="wheel" aria-label="Prize wheel with four segments">
+          <div class="wheel-label label-one"><span>🎟️</span><b>FREE MONTH</b></div>
+          <div class="wheel-label label-two"><span>🍫</span><b>CHOCOLATE</b></div>
+          <div class="wheel-label label-three"><span>🔄</span><b>TRY AGAIN</b></div>
+          <div class="wheel-label label-four"><span>🎁</span><b>SURPRISE GIFT</b></div>
+          <div class="wheel-hub">Q</div>
+        </div>
+      </div>
+      <p id="spin-status" class="spin-status" aria-live="polite">Tap below to spin the wheel</p>
+      <button id="start" class="primary">SPIN THE WHEEL <span aria-hidden="true">↗</span></button>
     </section>
     <section class="panel hidden" id="prize" aria-labelledby="prize-title">
-      <div class="symbol">✦</div>
+      <div class="result-emoji" id="result-emoji" aria-hidden="true">🎁</div>
+      <div class="eyebrow">YOUR SPIN RESULT</div>
       <h1 id="prize-title">Congratulations!</h1>
       <div class="reward"><strong id="reward-title"></strong><p id="reward-description"></p></div>
-      <button id="claim" class="primary">Claim Your Gift</button>
+      <button id="claim" class="primary">Claim Your Prize</button>
     </section>
     <section class="panel hidden" id="registration" aria-labelledby="registration-title">
-      <h1 id="registration-title">Claim Your Free Month</h1>
+      <h1 id="registration-title">Claim Your Prize</h1>
       <p>Tell us a little about your business.</p>
       <form id="lead-form">
         <label>Full Name <input name="fullName" autocomplete="name" maxlength="120" required /></label>
@@ -46,7 +54,7 @@
     </section>
     <section class="panel hidden" id="success" aria-labelledby="success-title">
       <div class="symbol">✓</div><h1 id="success-title">Request Received!</h1>
-      <p>Thank you! Our team will contact you about your free month.</p>
+      <p>Thank you! Our team will contact you about your prize.</p>
       <p class="small">Your request is subject to the offer's eligibility terms.</p>
     </section>
     <footer>Where money moves smarter.</footer>
